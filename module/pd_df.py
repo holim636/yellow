@@ -4,7 +4,7 @@ import json
 import matplotlib.pyplot as plt
 
 def getCasualties():
-    data = pd.read_csv('./도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
+    data = pd.read_csv('../yellow/res/data/도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
     df = pd.DataFrame(data)
 
     df1 = df[['발생일', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지_시도', '발생지_시군구', '피해자_당사자종별']]
