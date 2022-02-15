@@ -9,6 +9,25 @@
     <!--<link href="../static/css/bootstrap.css" rel="stylesheet">-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+        $(function(){
+            $.ajax({
+                url:'get_gu/',
+                dataType:'json',
+                success:function(msg){
+                    var msgKeys = Object.keys(msg)
+                    var $select_gu = $('#select_gu')
+                    for(var i=0 ; i<msgKeys.length ; i++){
+                        $select_gu.append($("<option>").val(msgKeys[i]).text(msg[msgKeys[i]]))
+                    }
+                },
+                error:function(){
+                    alert('통신실패!')
+                }
+            })
+        })
+
+    </script>
   
 
 </head>
