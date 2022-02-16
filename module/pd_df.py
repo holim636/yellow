@@ -61,8 +61,8 @@ def barGraph(gangnam):
 
     # plt.show()
 
-    # plt를 이미지로 저장
-    plt.savefig('gangnamTotal.png')
+    # plt를 이미지로 저장  /   경로지정 현제 pd_df.py기준으로 상대경로를 작성하면 됩니다.
+    plt.savefig('gangnamTotal.png')     # yellow 폴더에 png를 저장하고 싶다면 ../그림.png 라고 저장하면 됨
     plt.clf()           # plt 초기화
 
 def plotGraph(gangnam, gu):
