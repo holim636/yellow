@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def seoulAccident():
-    data = pd.read_csv('C:/workspaces/multiProject1/data/도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
+    data = pd.read_csv('../yellow/res/data/도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
     df = pd.DataFrame(data)
 
     df1 = df[['발생일', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지_시도', '발생지_시군구', '피해자_당사자종별']]
@@ -38,9 +38,9 @@ def seoulAccident():
 seoul = seoulAccident()
 # print(seoul)
 
-# make_json = json.dumps(gangbuk, ensure_ascii=False)
-# with open('seoul_totalAccident.json', 'w', encoding='utf_8') as f:
-#     f.write(make_json)
+make_json = json.dumps(seoul, ensure_ascii=False)
+with open('seoul_totalAccident.json', 'w', encoding='utf_8') as f:
+    f.write(make_json)
 
 # 시각화하는 함수 만들기. 서울시 전체 사고율을 bar 그래프로 나타내보자.
 def accident_bar():
