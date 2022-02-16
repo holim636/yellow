@@ -84,10 +84,11 @@ def gu_line(guname):
     # 그래프로 나타내기
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(years, gu_accident)
+    ax.plot(years, gu_accident, marker='o')
+    plt.yticks(list(range(0, 101, 10)))
 
     plt.show()
 
 if __name__ == '__main__':
     accident_bar()
-    gu_line(guname='') # 구 이름을 넣어주세요! '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구', '광진구', '강북구', '도봉구'
+    gu_line('광진구') # 구 이름을 넣어주세요! '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구', '광진구', '강북구', '도봉구'
