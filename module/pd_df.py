@@ -57,6 +57,7 @@ def barGraph(gangnam):
     # print(accident)
     x = np.arange(5)                # x축이 5개
     plt.bar(x, accident)            # y축이 연도별 총 사고 횟수
+    plt.ylim(0, 400)  # y축이 0부터 100까지
     plt.xticks(x, yearList)         # x축이 각각의 연도
 
     # plt.show()
@@ -76,7 +77,7 @@ def plotGraph(gangnam, gu):
     print(accident)
 
     plt.plot(yearList, accident)    # x축이 각각의 연도, y축이 사고 발생 수
-    plt.ylim(0, 50)                 # y축이 0부터 50까지
+    plt.ylim(0, 100)                 # y축이 0부터 100까지
     # plt.show()
 
     # plt 파일로 저장
