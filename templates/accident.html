@@ -6,26 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <!--<link href="../static/css/bootstrap.css" rel="stylesheet">-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    {% load static %}
     <script>
-        $(function(){
-            $.ajax({
-                url:'get_gu/',
-                dataType:'json',
-                success:function(msg){
-                    var msgKeys = Object.keys(msg)
-                    var $select_gu = $('#select_gu')
-                    for(var i=0 ; i<msgKeys.length ; i++){
-                        $select_gu.append($("<option>").val(msgKeys[i]).text(msg[msgKeys[i]]))
-                    }
-                },
-                error:function(){
-                    alert('통신실패!')
+        function createImg(){
+            var option = document.getElementsByTagName("option")
+            var optionVal=""
+
+            for (var i=1 ; i<option.length ; i++){
+                if (option[i].selected){
+                    optionVal=option[i].value
                 }
-            })
-        })
+            }
+
+            var img = document.createElement("img")
+            img.setAttribute("src",optionVal)
+
+            var div = document.getElementById("imgview")
+            var chd = document.querySelector("#imgview > img")
+            div.replaceChild(img,chd)
+        }
 
     </script>
   
@@ -33,22 +32,33 @@
 </head>
 <body>
     
-    <h1>서울시 보행자 교통사고 현황</h1>
-
-    <p>
-        서울시 보행자 교통사고 현황 _ 그래프 바로 보여주기 : iframe에 그래프가 꽉 차게 안 보임 ㅜ
-    </p>
+    <h3>서울시 보행자 교통사고 현황</h3>
 
     <iframe src="../static/charts/testchart.html" title="서울시 보행자 교통사고" width="500" height="350" style="border:none;"></iframe>
 
-    <div id="wrapper">
-        <select id="select_gu">
-            <option value="0">구 선택</option>
-        </select>
-    </div>
+    <select id="gu">
+        <option value="0">구선택</option>
+        <option value="{% static 'img/gangnam.png' %}">강남구</option> <!-- 그래프 색상 정해지면 경로 넣어서 수정!-->
+        <option value="{% static 'img/.png' %}">강북구</option>
+        <option value="{% static 'img/.png' %}">관악구</option>
+        <option value="{% static 'img/.png' %}">광진구</option>
+        <option value="{% static 'img/.png' %}">구로구</option>
+        <option value="{% static 'img/.png' %}">금천구</option>
+        <option value="{% static 'img/.png' %}">도봉구</option>
+        <option value="{% static 'img/.png' %}">동대문구</option>
+        <option value="{% static 'img/.png' %}">동작구</option>
+        <option value="{% static 'img/.png' %}">마포구</option>
+        <option value="{% static 'img/.png' %}">서대문구</option>
+        <option value="{% static 'img/.png' %}">성동구</option>
+        <option value="{% static 'img/.png' %}">송파구</option>
+        <option value="{% static 'img/.png' %}">양천구</option>
+        <option value="{% static 'img/.png' %}">영등포구</option>
+        <option value="{% static 'img/.png' %}">은평구</option>
+        <option value="{% static 'img/.png' %}">중랑구</option>
+    </select>
 
-    <div id="result"></div>
+    <button onclick="createImg()">검색</button>
 
-
+    <div id="imgview"><img src=""></div>
 </body>
 </html>

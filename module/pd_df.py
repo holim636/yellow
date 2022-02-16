@@ -91,5 +91,5 @@ if __name__ == '__main__':
 
     barGraph(gangnam)
 
-    plotGraph(gangnam, '영등포구')
+    plotGraph(gangnam, '강남구')
 
