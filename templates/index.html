@@ -84,19 +84,27 @@
     </div>
     <p>
       <button style="margin-left: 30px; margin-right: 65px; background-color: lavender;">
-        <img src="resources/img/image3.jpeg" width="220" height="220" style="border-radius: 15px;">  
+        <a href="{% url 'accident' %}">
+          <img src="resources/img/image3.jpeg" width="220" height="220" style="border-radius: 15px;">
+        </a>
       </button>
       
       <button style="margin-right: 65px; background-color: lavender;">
-        <img src="resources/img/image6.jpg" width="220" height="220" style="border-radius: 15px;">
+        <a href="{% url 'yellowloc' %}">
+          <img src="resources/img/image6.jpg" width="220" height="220" style="border-radius: 15px;">
+        </a>
       </button>
 
       <button style="margin-right: 65px; background-color: lavender;">
-        <img src="resources/img/yellowcarpet.jpeg" width="220" height="220" style="border-radius: 15px;">
+        <a href="{% url 'yellowaccident' %}">
+          <img src="resources/img/yellowcarpet.jpeg" width="220" height="220" style="border-radius: 15px;">
+        </a>
       </button>
       
       <button style="margin-right: 0px; background-color: lavender;">
-        <img src="resources/img/image4.jpeg" width="220" height="220" style="border-radius: 15px;">
+        <a href="{% url 'conclusion' %}">
+          <img src="resources/img/image4.jpeg" width="220" height="220" style="border-radius: 15px;">
+        </a>
       </button>
       <br><br><br>
       <br><br><br>
