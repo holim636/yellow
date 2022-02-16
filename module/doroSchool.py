@@ -1,7 +1,7 @@
 import csv
 import sys
 
-f = open('res/data/seoul_elementary.csv', 'r', encoding='cp949')
+f = open('../yellow/res/data/seoul_elementary.csv', 'r', encoding='cp949')
 readCsv = csv.reader(f)
 schoolDict={}
 

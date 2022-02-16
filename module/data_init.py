@@ -6,7 +6,7 @@ import json
 class schoolLoc:
     def __init__(self):
         self.schoolDict = dict()
-        f = open('res/data/seoul_elementary.csv', 'r', encoding='cp949')
+        f = open('../yellow/res/data/seoul_elementary.csv', 'r', encoding='cp949')
         readCsv = csv.reader(f)
         for line in readCsv:
             self.schoolDict[line[3]]=line[7]
@@ -82,7 +82,7 @@ school = make_list()
 
 
 title = ['school','date','juso','lat','lon']
-file_path = "./yellow.json"
+file_path = "../yellow/res/data/yellow.json"
 
 data = {}
 data['yellow'] = []
