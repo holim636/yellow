@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def getCasualties():
-    data = pd.read_csv('./도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
+    data = pd.read_csv('../yellow/res/data/도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
     df = pd.DataFrame(data)
 
     # 표시할 df 열
