@@ -64,9 +64,13 @@ def accident_bar():
     fig = plt.figure()
     ax = fig.subplots()
     x = np.arange(5)
-    ax.bar(x, total_accident, width=0.6) # 사고횟수
+    ax.bar(x, total_accident, color='#ffd400', width=0.6) # 사고횟수
     # ax.set_title('서울 강북지역 연도별 사고현황') 한글 깨짐, 필요하다면 한글 사용되도록 추가하기
-    plt.xticks(x, years) # 연도별
+    plt.xticks(x, years, color='orange') # 연도별
+    plt.yticks(color='orange')
+    ax.set_facecolor('black')
+    fig.patch.set_facecolor('xkcd:black')
+    # plt.grid(True)
     plt.show()
 
 
@@ -84,8 +88,13 @@ def gu_line(guname):
     # 그래프로 나타내기
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(years, gu_accident, marker='o')
-    plt.yticks(list(range(0, 101, 10)))
+    ax.plot(years, gu_accident, color='#ffd400', marker='o')
+    ax.set_facecolor('black')
+    fig.patch.set_facecolor('xkcd:black')
+    plt.yticks(list(range(0, 101, 10)), color='orange')
+    plt.xticks(color='orange')
+    # plt.grid(True)
+
 
     plt.show()
 
