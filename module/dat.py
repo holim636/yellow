@@ -2,14 +2,18 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.font_manager as fm
 import csv
 import os
 
-
+font_path = "../yellow/res/font/NanumGothic.ttf"
 PATH = "../yellow/res/data/"
 dat1 = '도로교통공단_어린이 교통사고 현황_20191231.csv'
 dat2 = '도로교통공단_어린이 사망교통사고 정보_20191231.csv'
 dat3 = 'yellow.json'
+mpl.rcParams['font.family'] = 'NanumGothic'
+mpl.rcParams['font.size'] = 10
 
 def load_data(path=PATH, name =''):
     csv_path = os.path.join(path, name)
@@ -21,7 +25,7 @@ def load_data_json(path=PATH, name = ''):
         data = json.load(jsonfile)
     return pd.DataFrame(data['yellow'])
 
-def plot_data(name = '',year = ''):
+def plot_data(name = '',year = ''):#지역 현황 그래프
     #a = load_data(name= dat1)
     b = load_data(name= dat2)
     new_b = b[b['발생지시도']=='서울']
@@ -40,7 +44,7 @@ def plot_data(name = '',year = ''):
     print(c)
     plt.show()
 
-def ac_plot_data(name = ''):
+def ac_plot_data(name = ''): #사고 통계 그래프
     #a = load_data(name= dat1)
     b = load_data(name= dat2)
     new_b = b[b['발생지시도']=='서울']
@@ -55,5 +59,22 @@ def ac_plot_data(name = ''):
     plt.ylabel('')
     plt.show()
 
+def detail_plot_data(name = ''): #연도별 사상자 수 그래프
+    #a = load_data(name= dat1)
+    b = load_data(name= dat2)
+    new_b = b[b['발생지시도']=='서울']
+    if name != '':
+        new_b = new_b[b['발생지시군구'] == name]
+    new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+    p = new_b.groupby('발생년').sum()
+    p = p.loc[:,['사망자수','부상자수','중상자수','경상자수','부상신고자수']]
+    order = [2015,2016,2017,2018,2019]
+    print(p)
+    p = p.loc[order]
+    p.plot.bar()
+    plt.xlabel('year')
+    plt.ylabel('')
+    plt.show()
+
 #여기서 구 이름만 입력해주면 됩니다
-ac_plot_data(name='')
+detail_plot_data(name='')
