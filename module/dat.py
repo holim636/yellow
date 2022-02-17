@@ -25,16 +25,20 @@ def load_data_json(path=PATH, name = ''):
         data = json.load(jsonfile)
     return pd.DataFrame(data['yellow'])
 
-def plot_data(name = '',year = ''):#지역 현황 그래프
+def plot_data(name = '',year = '',type=1):#지역 현황 그래프
     #a = load_data(name= dat1)
     b = load_data(name= dat2)
+    c = load_data_json(name=dat3)
     new_b = b[b['발생지시도']=='서울']
     new_b = new_b[new_b['사고유형_대분류']=='차대사람']
     if name != '':
-        new_b = new_b[b['발생지시군구']==name]
-    c = load_data_json(name=dat3)
-    if name !='':
+        new_b = new_b[new_b['발생지시군구']==name]
         c = c[c['juso'].str.contains(name)]
+    if year != '':
+        new_b = new_b[new_b['발생년']==year]
+        c['date'] = pd.to_datetime(c['date'])
+        c['year'] = c['date'].dt.year
+        c = c[c['year']<=year]
     c['lat'] = pd.to_numeric(c['lat'])
     c['lon'] = pd.to_numeric(c['lon'])
     plt.figure()
@@ -42,67 +46,95 @@ def plot_data(name = '',year = ''):#지역 현황 그래프
     plt.scatter(c['lon'],c['lat'],color='yellow')
     plt.xlabel('경도')
     plt.ylabel('위도')
-    print(c)
     plt.show()
 
-def ac_plot_data(name = ''): #사고 통계 그래프
-    #a = load_data(name= dat1)
-    b = load_data(name= dat2)
-    new_b = b[b['발생지시도']=='서울']
-    new_b = new_b[new_b['사고유형_대분류']=='차대사람']
-    if name != '':
-        new_b = new_b[b['발생지시군구'] == name]
-    new_b['발생년'] = pd.to_numeric(new_b['발생년'])
-    p = new_b['발생년'].value_counts()
-    #order = [2015,2016,2017,2018,2019]
-    #p = p.loc[order]
-    p.plot.bar()
-    plt.xlabel('year')
-    plt.ylabel('')
-    plt.show()
-
-def detail_plot_data(name = ''): #연도별 사상자 수 그래프
-    #a = load_data(name= dat1)
-    b = load_data(name= dat2)
-    new_b = b[b['발생지시도']=='서울']
-    new_b = new_b[new_b['사고유형_대분류']=='차대사람']
-    if name != '':
-        new_b = new_b[b['발생지시군구'] == name]
-    new_b['발생년'] = pd.to_numeric(new_b['발생년'])
-    new_b['사망자수'] = pd.to_numeric(new_b['사망자수'])
-    new_b['부상자수'] = pd.to_numeric(new_b['부상자수'])
-    new_b['중상자수'] = pd.to_numeric(new_b['중상자수'])
-    new_b['경상자수'] = pd.to_numeric(new_b['경상자수'])
-    new_b['부상신고자수'] = pd.to_numeric(new_b['부상신고자수'])
-    p = new_b.groupby('발생년').sum()
-    p = p.loc[:,['사망자수','부상자수','중상자수','경상자수','부상신고자수']]
+def ac_plot_data(name = '',type = 1): #사고 통계 그래프
+    if type == 0:
+        b = load_data(name= dat1)
+        new_b = b[b['발생지_시도'] == '서울']
+        new_b = new_b[new_b['사고유형_대분류'] == '차대사람']
+        if name != '':
+            new_b = new_b[b['발생지_시군구'] == name]
+        new_b['발생일'] = pd.to_datetime(new_b['발생일'])
+        new_b['발생년'] = new_b['발생일'].dt.year
+        new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+        p = new_b['발생년'].value_counts()
+    else:
+        b = load_data(name= dat2)
+        new_b = b[b['발생지시도']=='서울']
+        new_b = new_b[new_b['사고유형_대분류']=='차대사람']
+        if name != '':
+            new_b = new_b[b['발생지시군구'] == name]
+        new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+        p = new_b['발생년'].value_counts()
     order = [2015,2016,2017,2018,2019]
-    print(p)
     p = p.loc[order]
     p.plot.bar()
     plt.xlabel('year')
     plt.ylabel('')
     plt.show()
 
-def ac_plot_data_2(name = ''): #사고 현황 그래프
+def detail_plot_data(name = '',type = 1): #연도별 사상자 수 그래프
+    if type == 0:
+        b = load_data(name=dat1)
+        # b = load_data(name= dat2)
+        new_b = b[b['발생지_시도'] == '서울']
+        new_b = new_b[new_b['사고유형_대분류'] == '차대사람']
+        if name != '':
+            new_b = new_b[b['발생지_시군구'] == name]
+        new_b['발생일'] = pd.to_datetime(new_b['발생일'])
+        new_b['발생년'] = new_b['발생일'].dt.year
+        new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+        new_b['사망자수'] = pd.to_numeric(new_b['사망자수'])
+        # new_b['부상자수'] = pd.to_numeric(new_b['부상자수'])
+        new_b['중상자수'] = pd.to_numeric(new_b['중상자수'])
+        new_b['경상자수'] = pd.to_numeric(new_b['경상자수'])
+        new_b['부상신고자수'] = pd.to_numeric(new_b['부상신고자수'])
+        p = new_b.groupby('발생년').sum()
+        p = p.loc[:, ['사망자수', '중상자수', '경상자수', '부상신고자수']]
+    #a = load_data(name= dat1)
+    else :
+        b = load_data(name= dat2)
+        new_b = b[b['발생지시도']=='서울']
+        new_b = new_b[new_b['사고유형_대분류']=='차대사람']
+        if name != '':
+            new_b = new_b[b['발생지시군구'] == name]
+        new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+        new_b['사망자수'] = pd.to_numeric(new_b['사망자수'])
+        new_b['부상자수'] = pd.to_numeric(new_b['부상자수'])
+        new_b['중상자수'] = pd.to_numeric(new_b['중상자수'])
+        new_b['경상자수'] = pd.to_numeric(new_b['경상자수'])
+        new_b['부상신고자수'] = pd.to_numeric(new_b['부상신고자수'])
+        p = new_b.groupby('발생년').sum()
+        p = p.loc[:,['사망자수','부상자수','중상자수','경상자수','부상신고자수']]
+    order = [2015,2016,2017,2018,2019]
+    p = p.loc[order]
+    p.plot.bar()
+    plt.xlabel('year')
+    plt.ylabel('')
+    plt.show()
+
+
+def accident_data(name = ''): #교통사고 분석
     a = load_data(name= dat1)
     #b = load_data(name= dat2)
     new_a = a[a['발생지_시도']=='서울']
     new_a = new_a[new_a['사고유형_대분류']=='차대사람']
-    if name != '':
-        new_a = new_a[a['발생지_시군구'] == name]
-    new_a['발생일'] = pd.to_datetime(new_a['발생일'])
-    new_a['year'] = new_a['발생일'].dt.year
-    #new_a['year'] = pd.to_numeric(new_a['year'])
-    p = new_a['year'].value_counts()
-    order = [2015,2016,2017,2018,2019]
-    p = p.loc[order]
-    print(p)
-    p.plot.bar()
-    plt.xlabel('year')
+    pie = new_a['가해자법규위반'].value_counts()
+    pie.plot.pie()
+    plt.xlabel('서울시 보행자 차량 사고 유형')
     plt.ylabel('')
     plt.show()
 
 
+
+
+
 #여기서 구 이름만 입력해주면 됩니다
-plot_data(name='')
+
+#plot_data(name='',year='')
+#연도별 설치 완료된 옐로카펫 위치와 연도별 사고 현황을 시각화
+#ac_plot_data(name = '강남구',type= 0)
+#연도별 사고건수 출력 type1은 사망사고(B데이터), 0은 모든사고(A데이터)
+#detail_plot_data(name = '',type=0)
+#연도별 사고 현황 출력 type1은 사망사고(B데이터) 0은 모든 사고(A데이터)
