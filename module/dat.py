@@ -25,8 +25,7 @@ def load_data_json(path=PATH, name = ''):
         data = json.load(jsonfile)
     return pd.DataFrame(data['yellow'])
 
-def plot_data(name = '',year = '',type=1):#지역 현황 그래프
-    #a = load_data(name= dat1)
+def plot_data(name = '',year = ''):#지역 현황 그래프
     b = load_data(name= dat2)
     c = load_data_json(name=dat3)
     new_b = b[b['발생지시도']=='서울']
@@ -134,6 +133,8 @@ def accident_data(name = ''): #교통사고 분석
 
 #plot_data(name='',year='')
 #연도별 설치 완료된 옐로카펫 위치와 연도별 사고 현황을 시각화
+#name 항목에 구 입력 하는것으로 위치 지정
+
 #ac_plot_data(name = '강남구',type= 0)
 #연도별 사고건수 출력 type1은 사망사고(B데이터), 0은 모든사고(A데이터)
 #detail_plot_data(name = '',type=0)
