@@ -21,8 +21,8 @@ def load_data_json(path=PATH, name = ''):
         data = json.load(jsonfile)
     return pd.DataFrame(data['yellow'])
 
-def plot_data(name = ''):
-    a = load_data(name= dat1)
+def plot_data(name = '',year = ''):
+    #a = load_data(name= dat1)
     b = load_data(name= dat2)
     new_b = b[b['발생지시도']=='서울']
     if name != '':
@@ -39,5 +39,21 @@ def plot_data(name = ''):
     plt.ylabel('위도')
     print(c)
     plt.show()
+
+def ac_plot_data(name = ''):
+    #a = load_data(name= dat1)
+    b = load_data(name= dat2)
+    new_b = b[b['발생지시도']=='서울']
+    if name != '':
+        new_b = new_b[b['발생지시군구'] == name]
+    new_b['발생년'] = pd.to_numeric(new_b['발생년'])
+    p = new_b['발생년'].value_counts()
+    order = [2015,2016,2017,2018,2019]
+    p = p.loc[order]
+    p.plot.bar()
+    plt.xlabel('year')
+    plt.ylabel('')
+    plt.show()
+
 #여기서 구 이름만 입력해주면 됩니다
-plot_data(name='동대문구')
+ac_plot_data(name='')
