@@ -66,22 +66,41 @@ def barGraph(gangnam):
     plt.savefig('gangnamTotal.png')     # yellow 폴더에 png를 저장하고 싶다면 ../그림.png 라고 저장하면 됨
     plt.clf()           # plt 초기화
 
-def plotGraph(gangnam, gu):
+def plotGraph(gu):
+    with open(jsonData1, 'r', encoding='utf_8') as f:
+        gangnam = json.load(f)
+
+    with open(jsonData2, 'r', encoding='utf_8') as f:
+        accident = json.load(f)
+
     gugun = gangnam['강남']
+    gugun1 = accident['강남']
     yearList = ['2015', '2016', '2017', '2018', '2019']
     accident = list()
+    accident1 = list()
+    persent = list()
 
     # 선택한 구의 연도별 사고 현황을 accident라는 list에 저장
     for year in yearList:
         accident.append(gugun[gu][year])
-    print(accident)
+        accident1.append(gugun1[gu][year])
+        a = round(float(gugun1[gu][year]/gugun[gu][year])*100, 2)
+        persent.append(a)
 
-    plt.plot(yearList, accident)    # x축이 각각의 연도, y축이 사고 발생 수
-    plt.ylim(0, 100)                 # y축이 0부터 100까지
-    # plt.show()
+    print(accident, accident1, persent)
+    with plt.rc_context({'axes.edgecolor':'lightgray'}):
+        fig, ax = plt.subplots()
+        ax.plot(yearList, accident, color='#ffd400', marker='o', label='사상자')
+        ax.plot(yearList, accident1, color='#ff7b5a', marker='o', label='사망자')
+        ax.plot(yearList, persent, color='#1e90ff', marker='v', label='사망률[%]')
+        plt.grid(axis='y')
+
+        plt.yticks(list(range(0, 100, 10)))
+        plt.legend(loc=1)
+        plt.title(gu)
 
     # plt 파일로 저장
-    plt.savefig('gangnamTotal_1.png')
+    plt.savefig(f'{gu}.png')
     plt.clf()                       # plt 초기화
 
 
