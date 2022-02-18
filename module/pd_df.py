@@ -1,97 +1,136 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-# import json
+import json
+from matplotlib import font_manager, rc
 
 
-def getCasualties():
-    data = pd.read_csv('../yellow/res/data/도로교통공단_어린이 교통사고 현황_20191231.csv', encoding="cp949")
+font_path = './D2Coding.ttc'
+font = font_manager.FontProperties(fname=font_path).get_name()
+rc('font', family=font)
+
+jsonData1 = 'seoul_Casualty.json'
+jsonData2 = 'seoul_dead.json'
+csvData1 = '도로교통공단_어린이 교통사고 현황_20191231.csv'
+csvData2 = '도로교통공단_어린이 사망교통사고 정보_20191231.csv'
+
+def getCasualties(loc):
+    data = pd.read_csv(loc, encoding="cp949")
     df = pd.DataFrame(data)
 
     # 표시할 df 열
-    df1 = df[['발생일', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지_시도', '발생지_시군구', '피해자_당사자종별', '주야']]
+    df1 = df[['발생년월일시', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지시도', '발생지시군구', '피해자_당사자종별']]
     df2 = df1.loc[df['피해자_당사자종별'] == '보행자']        # 피해자_당사자종별 중 보행자만
-    df3 = df2.loc[df['발생지_시도'] == '서울']              # 발생지_시도 중 서울만
+    df3 = df2.loc[df['발생지시도'] == '서울']              # 발생지_시도 중 서울만
     # df3 = df2_2.loc[df['주야'] == '주']
 
     # 강남의 ~~구들
-    gangnam = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구', '송파구']
+    guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구', '송파구', '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구',
+              '광진구', '강북구', '도봉구']
     dates = ['2015', '2016', '2017', '2018', '2019']      # 연도별 데이터터
 
     gangnam_casualties = dict()
     guDict = dict()
 
-    for gu in gangnam:
-        df_1 = df3.loc[df['발생지_시군구'] == gu]           # 시군구가 gu인 df
-        df_1 = df_1.set_index(['발생일'])                  # 발생일을 index로
+    for gu in guList:
+        df_1 = df3.loc[df['발생지시군구'] == gu]           # 시군구가 gu인 df
+        df_1 = df_1.set_index(['발생년월일시'])                  # 발생일을 index로
         yearDict = dict()
-
 
         for date in dates:        # date가 2015라면 2015-01-01부터 2015-12-31까지의 df를 가지고 옴
             df_1_1 = df_1.loc[f'{date}-01-01':f'{date}-12-31']
-            yearDict[date] = int(len(df_1_1.index))
+            numDict = dict()
+            numDict['사망자수'] = int(df_1_1['사망자수'].sum())
+            numDict['중상자수'] = int(df_1_1['중상자수'].sum())
+            numDict['경상자수'] = int(df_1_1['경상자수'].sum())
+            numDict['부상신고자수'] = int(df_1_1['부상신고자수'].sum())
+            yearDict[date] = numDict
 
         guDict[gu] = yearDict
 
-    gangnam_casualties['강남'] = guDict
+    gangnam_casualties['서울'] = guDict
+    total_stores_json = json.dumps(gangnam_casualties, ensure_ascii=False)
+    with open(jsonData2, 'w', encoding='utf_8') as f:
+        f.write(total_stores_json)
+
     return gangnam_casualties
 
-    # total_stores_json = json.dumps(gangnam_casualties, ensure_ascii=False)
-    # with open('gangnam_casualties.json', 'w', encoding='utf_8') as f:
-    #     f.write(total_stores_json)
+# 바 그래프 그리기
+def barGraph():
+    with open(jsonData1, 'r', encoding='utf_8') as f:
+        casualty = json.load(f)
 
-def barGraph(gangnam):
-    gugun = gangnam['강남']
-    guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구', '송파구']
+    with open(jsonData2, 'r', encoding='utf_8') as f:
+        dead = json.load(f)
+
+    gugun1 = casualty['서울']
+    gugun2 = dead['서울']
+    guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구',
+              '송파구', '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구',
+              '광진구', '강북구', '도봉구']
     yearList = ['2015', '2016', '2017', '2018', '2019']
-    accident = list()
+    accident1 = list()
+    accident2 = list()
+    persent = list()
 
     # 강남의 각 연도별 사고 횟수 합계
     for year in yearList:
-        sum = 0
+        sum1 = 0
+        sum2 = 0
         for gu in guList:
-            sum = sum + gugun[gu][year]
+            sum1 = sum1 + gugun2[gu][year]['사망자수'] + gugun1[gu][year]['중상자수'] + gugun1[gu][year]['경상자수'] + gugun1[gu][year]['부상신고자수']
+            sum2 = sum2 + gugun2[gu][year]['사망자수']
 
-        accident.append(sum)
+        accident1.append(sum1)
+        accident2.append(sum2)
+        a = round(float(sum2/sum1)*100, 2)
+        persent.append(a)
 
-    # print(accident)
-    x = np.arange(5)                # x축이 5개
-    plt.bar(x, accident)            # y축이 연도별 총 사고 횟수
-    plt.ylim(0, 400)  # y축이 0부터 100까지
-    plt.xticks(x, yearList)         # x축이 각각의 연도
+    print(accident1, accident2, persent)
+
+    fig = plt.figure()
+    ax = fig.subplots()
+    x = np.arange(5)
+    ax.bar(x, accident2, color='#ff7b5a', width=0.45, zorder=3, label='사망자')
+    ax.bar(x, accident1, color='#ffd400', width=0.45, zorder=3, label='사상자', bottom=accident2)
+    # ax.bar(x, persent, color='#1e90ff', width=0.6, zorder=3, label='사망률[%]', bottom=accident2)
+    ax.set_title('서울 연도별 사고현황')        # 한글 깨짐, 필요하다면 한글 사용되도록 추가하기
+    plt.xticks(x, yearList)  # 연도별
+    plt.legend(loc='upper left')
+    plt.grid(True, zorder=0, axis='y')
+
+    plt.savefig(f'seoul_total.png')
+    plt.clf()
 
     # plt.show()
 
-    # plt를 이미지로 저장  /   경로지정 현제 pd_df.py기준으로 상대경로를 작성하면 됩니다.
-    plt.savefig('gangnamTotal.png')     # yellow 폴더에 png를 저장하고 싶다면 ../그림.png 라고 저장하면 됨
-    plt.clf()           # plt 초기화
-
 def plotGraph(gu):
     with open(jsonData1, 'r', encoding='utf_8') as f:
-        gangnam = json.load(f)
+        casualty = json.load(f)
 
     with open(jsonData2, 'r', encoding='utf_8') as f:
-        accident = json.load(f)
+        dead = json.load(f)
 
-    gugun = gangnam['강남']
-    gugun1 = accident['강남']
+    gugun1 = casualty['서울']
+    gugun2 = dead['서울']
     yearList = ['2015', '2016', '2017', '2018', '2019']
-    accident = list()
     accident1 = list()
+    accident2 = list()
     persent = list()
 
     # 선택한 구의 연도별 사고 현황을 accident라는 list에 저장
     for year in yearList:
-        accident.append(gugun[gu][year])
-        accident1.append(gugun1[gu][year])
-        a = round(float(gugun1[gu][year]/gugun[gu][year])*100, 2)
+        sum = gugun2[gu][year]['사망자수'] + gugun1[gu][year]['중상자수'] + gugun1[gu][year]['경상자수'] + gugun1[gu][year]['부상신고자수']
+        accident1.append(sum)
+        accident2.append(gugun2[gu][year]['사망자수'])
+        a = round(float(gugun2[gu][year]['사망자수']/sum)*100, 2)
         persent.append(a)
 
-    print(accident, accident1, persent)
+    print(accident1, accident2, persent)
     with plt.rc_context({'axes.edgecolor':'lightgray'}):
         fig, ax = plt.subplots()
-        ax.plot(yearList, accident, color='#ffd400', marker='o', label='사상자')
-        ax.plot(yearList, accident1, color='#ff7b5a', marker='o', label='사망자')
+        ax.plot(yearList, accident1, color='#ffd400', marker='o', label='사상자')
+        ax.plot(yearList, accident2, color='#ff7b5a', marker='o', label='사망자')
         ax.plot(yearList, persent, color='#1e90ff', marker='v', label='사망률[%]')
         plt.grid(axis='y')
 
@@ -105,10 +144,14 @@ def plotGraph(gu):
 
 
 if __name__ == '__main__':
-    gangnam = getCasualties()
-    # print(gangnam)
-
-    barGraph(gangnam)
-
-    plotGraph(gangnam, '강남구')
-
+    # getCasualties(csvData2)
+    # plotGraph('양천구')
+    barGraph()
+    # # getCasualties(data2)
+    #
+    # guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구',
+    #           '송파구', '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구',
+    #           '광진구', '강북구', '도봉구']
+    #
+    # for gu in guList:
+    #     plotGraph(gu)
