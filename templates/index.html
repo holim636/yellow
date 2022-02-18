@@ -72,7 +72,7 @@ a {
 
 
 <script>
-    var idx_lgth = $("#visual>div").length;
+  var idx_lgth = $("#visual>div").length;
   var srt = 1;
   
   $("section>a").click(function(){
@@ -90,7 +90,7 @@ function AutoRun(){
   }
   $("section>a").eq(srt).addClass('on').siblings().removeClass('on');
   $("#visual>div").eq(srt).addClass('on').siblings().removeClass('on');
-  srt++;  
+  srt = (srt + 1) % 4;  
 }
 </script>
 
