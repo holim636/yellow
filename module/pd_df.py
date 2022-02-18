@@ -14,10 +14,12 @@ jsonData1 = 'seoul_Casualty.json'           # csvData1로 만든 json 파일
 jsonData2 = 'seoul_dead.json'               # csvData2로 만든 json 파일
 csvData1 = '도로교통공단_어린이 교통사고 현황_20191231.csv'
 csvData2 = '도로교통공단_어린이 사망교통사고 정보_20191231.csv'
+csvLoc = '../yellow/res/data/'
+staticLoc = '../static/img/'
 
 
 def getCasualties(loc):
-    data = pd.read_csv(loc, encoding="cp949")
+    data = pd.read_csv(csvLoc+loc, encoding="cp949")
     df = pd.DataFrame(data)
 
     # 표시할 df head
@@ -59,17 +61,17 @@ def getCasualties(loc):
 
     gangnam_casualties['서울'] = guDict
     total_stores_json = json.dumps(gangnam_casualties, ensure_ascii=False)
-    with open(jsonData2, 'w', encoding='utf_8') as f:
+    with open(csvLoc+jsonData2, 'w', encoding='utf_8') as f:
         f.write(total_stores_json)
 
     return gangnam_casualties
 
 # 바 그래프 그리기
 def barGraph():
-    with open(jsonData1, 'r', encoding='utf_8') as f:
+    with open(csvLoc+jsonData1, 'r', encoding='utf_8') as f:
         casualty = json.load(f)
 
-    with open(jsonData2, 'r', encoding='utf_8') as f:
+    with open(csvLoc+jsonData2, 'r', encoding='utf_8') as f:
         dead = json.load(f)
 
     gugun1 = casualty['서울']
@@ -106,10 +108,10 @@ def barGraph():
     ax.bar(x, accident1, color='#ffd400', width=0.45, zorder=3, label='사상자', bottom=accident2)
     ax.set_title('서울 연도별 사고현황')                 # 그래프 제목
     plt.xticks(x, yearList)                          # x축을 각각의 연도로
-    plt.legend(loc='upper left')                     # 범례를를
-    pltgrid(True, zorder=0, axis='y')
+    plt.legend(loc='upper right')                     # 범례를 좌상단으로
+    plt.grid(True, zorder=0, axis='y')               # 그래프 격자 y축만 표시되게
 
-    plt.savefig(f'seoul_total.png')
+    plt.savefig(f'{staticLoc}seoul_total.png')                  # 그래프 png파일로 저장
     plt.clf()
 
     # plt.show()
@@ -128,7 +130,8 @@ def plotGraph(gu):
     accident2 = list()
     persent = list()
 
-    # 선택한 구의 연도별 사고 현황을 accident라는 list에 저장
+    # 선택한 구의 연도별 사상자/사망자 수를 accident1, 2라는 list에 저장
+    # persent는 사망자/사상자의 비율[%]
     for year in yearList:
         sum = gugun2[gu][year]['사망자수'] + gugun1[gu][year]['중상자수'] + gugun1[gu][year]['경상자수'] + gugun1[gu][year]['부상신고자수']
         accident1.append(sum)
@@ -136,20 +139,21 @@ def plotGraph(gu):
         a = round(float(gugun2[gu][year]['사망자수']/sum)*100, 2)
         persent.append(a)
 
-    print(accident1, accident2, persent)
+    # print(accident1, accident2, persent)
+    # 그래프 틀(? 프레임?)색 회색으로 설정
     with plt.rc_context({'axes.edgecolor':'lightgray'}):
         fig, ax = plt.subplots()
+        # 노랑 사상자 빨강 사망자 파랑 사망률
         ax.plot(yearList, accident1, color='#ffd400', marker='o', label='사상자')
         ax.plot(yearList, accident2, color='#ff7b5a', marker='o', label='사망자')
         ax.plot(yearList, persent, color='#1e90ff', marker='v', label='사망률[%]')
-        plt.grid(axis='y')
-
-        plt.yticks(list(range(0, 100, 10)))
-        plt.legend(loc=1)
-        plt.title(gu)
+        plt.grid(axis='y')                      # 격자 y축만 표시되도록
+        plt.yticks(list(range(0, 91, 10)))      # y축 범위 0~90까지 10씩 증가하도록
+        plt.legend(loc=1)                       # 범례위치 upper right
+        plt.title(gu)                           # 그래프 제목을 각각의 구 이름으로
 
     # plt 파일로 저장
-    plt.savefig(f'{gu}.png')
+    plt.savefig(f'{staticLoc}{gu}.png')
     plt.clf()                       # plt 초기화
 
 
