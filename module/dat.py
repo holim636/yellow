@@ -164,4 +164,4 @@ def accident_data(name = ''): #교통사고 분석
 #detail_plot_data(name = '',type=0)
 #연도별 사고 현황 출력 type1은 사망사고(B데이터) 0은 모든 사고(A데이터)
 #accident_data(name='')
-corr_data()
+#corr_data()
