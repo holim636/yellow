@@ -111,7 +111,7 @@ def barGraph():
     plt.legend(loc='upper right')                     # 범례를 좌상단으로
     plt.grid(True, zorder=0, axis='y')               # 그래프 격자 y축만 표시되게
 
-    plt.savefig(f'{staticLoc}seoul_total.png')                  # 그래프 png파일로 저장
+    plt.savefig(f'{staticLoc}seoul_total.png')       # 그래프 png파일로 저장
     plt.clf()
 
     # plt.show()
