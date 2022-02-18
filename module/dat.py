@@ -50,6 +50,35 @@ def corr_data(): #상관계수 출력
     print(corr_matirix['date'].sort_values(ascending=False))
 
 
+def corr_data_second(name = ''): #상관계수 출력
+    b = load_data(name=dat1)
+    c = load_data_json(name=dat3)
+    new_b = b[b['발생지_시도'] == '서울']
+
+    if name != '':
+        new_b = new_b[new_b['발생지_시군구'] == name]############################
+        c = c[c['juso'].str.contains(name)]
+
+    new_b = new_b[new_b['사고유형_대분류'] == '차대사람']
+    new_b = new_b.loc[:,['발생일','사망자수','중상자수','경상자수','부상신고자수']]
+    new_b['발생일'] = pd.to_datetime(new_b['발생일'])
+    new_b['발생일'] = new_b['발생일'].dt.year
+    new_b['총사상자'] = new_b['사망자수'] + new_b['중상자수'] + new_b['경상자수'] + new_b['부상신고자수']
+    group = new_b.groupby(new_b['발생일'])
+    d1 = group.sum()
+    c = c.loc[:,['date']]
+    c['date'] = pd.to_datetime(c['date'])
+    c['date'] = c['date'].dt.year
+    c['date'] = pd.to_numeric(c['date'])
+    c = c[c['date'] <= 2019]
+    d2 = c['date'].value_counts()
+    #d2 = d2.loc[[2015,2016,2017,2018,2019]]
+    #d2 = d2.cumsum()
+    data = pd.concat([d1,d2],axis=1)
+    data = data.fillna(0)
+    corr_matirix = data.corr()
+    print(corr_matirix['date'].sort_values(ascending=False))
+
 def plot_data(name = '',year = '',type=1):#지역 현황 그래프
     #a = load_data(name= dat1)
     b = load_data(name= dat2)
@@ -164,4 +193,4 @@ def accident_data(name = ''): #교통사고 분석
 #detail_plot_data(name = '',type=0)
 #연도별 사고 현황 출력 type1은 사망사고(B데이터) 0은 모든 사고(A데이터)
 #accident_data(name='')
-#corr_data()
+corr_data_second(name = '강남구')
