@@ -5,24 +5,33 @@ import json
 from matplotlib import font_manager, rc
 
 
+# 한글 폰트 사용할 수 있도록
 font_path = './D2Coding.ttc'
 font = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font)
 
-jsonData1 = 'seoul_Casualty.json'
-jsonData2 = 'seoul_dead.json'
+jsonData1 = 'seoul_Casualty.json'           # csvData1로 만든 json 파일
+jsonData2 = 'seoul_dead.json'               # csvData2로 만든 json 파일
 csvData1 = '도로교통공단_어린이 교통사고 현황_20191231.csv'
 csvData2 = '도로교통공단_어린이 사망교통사고 정보_20191231.csv'
+
 
 def getCasualties(loc):
     data = pd.read_csv(loc, encoding="cp949")
     df = pd.DataFrame(data)
 
-    # 표시할 df 열
-    df1 = df[['발생년월일시', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지시도', '발생지시군구', '피해자_당사자종별']]
-    df2 = df1.loc[df['피해자_당사자종별'] == '보행자']        # 피해자_당사자종별 중 보행자만
-    df3 = df2.loc[df['발생지시도'] == '서울']              # 발생지_시도 중 서울만
-    # df3 = df2_2.loc[df['주야'] == '주']
+    # 표시할 df head
+    # 사용할 csv파일이 1인지 2인지에따라 head가 다름으로 구분해 준다.
+    if loc == csvData1:
+        csvHead = ['발생일', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지_시도', '발생지_시군구', '피해자_당사자종별']
+    elif loc == csvData2:
+        csvHead = ['발생년월일시', '사망자수', '중상자수', '경상자수', '부상신고자수', '발생지시도', '발생지시군구', '피해자_당사자종별']
+    else:
+        print('형식에 맞는 csv파일인지 확인하세요')
+        return
+    df1 = df[csvHead]
+    df2 = df1.loc[df[csvHead[7]] == '보행자']             # 피해자_당사자종별 중 보행자만
+    df3 = df2.loc[df[csvHead[5]] == '서울']               # 발생지_시도 중 서울만
 
     # 강남의 ~~구들
     guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구', '송파구', '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구',
@@ -33,8 +42,8 @@ def getCasualties(loc):
     guDict = dict()
 
     for gu in guList:
-        df_1 = df3.loc[df['발생지시군구'] == gu]           # 시군구가 gu인 df
-        df_1 = df_1.set_index(['발생년월일시'])                  # 발생일을 index로
+        df_1 = df3.loc[df[csvHead[6]] == gu]              # 시군구가 gu인 df
+        df_1 = df_1.set_index([csvHead[0]])               # 발생일을 index로
         yearDict = dict()
 
         for date in dates:        # date가 2015라면 2015-01-01부터 2015-12-31까지의 df를 가지고 옴
@@ -65,6 +74,8 @@ def barGraph():
 
     gugun1 = casualty['서울']
     gugun2 = dead['서울']
+
+    # 서울의 각 구들
     guList = ['양천구', '구로구', '영등포구', '금천구', '동작구', '관악구', '강남구',
               '송파구', '은평구', '서대문구', '마포구', '동대문구', '성동구', '중랑구',
               '광진구', '강북구', '도봉구']
@@ -73,7 +84,7 @@ def barGraph():
     accident2 = list()
     persent = list()
 
-    # 강남의 각 연도별 사고 횟수 합계
+    # 강남의 각 연도별 사상자/사망자 합계
     for year in yearList:
         sum1 = 0
         sum2 = 0
@@ -86,18 +97,17 @@ def barGraph():
         a = round(float(sum2/sum1)*100, 2)
         persent.append(a)
 
-    print(accident1, accident2, persent)
-
     fig = plt.figure()
     ax = fig.subplots()
     x = np.arange(5)
+
+    # 바생성
     ax.bar(x, accident2, color='#ff7b5a', width=0.45, zorder=3, label='사망자')
     ax.bar(x, accident1, color='#ffd400', width=0.45, zorder=3, label='사상자', bottom=accident2)
-    # ax.bar(x, persent, color='#1e90ff', width=0.6, zorder=3, label='사망률[%]', bottom=accident2)
-    ax.set_title('서울 연도별 사고현황')        # 한글 깨짐, 필요하다면 한글 사용되도록 추가하기
-    plt.xticks(x, yearList)  # 연도별
-    plt.legend(loc='upper left')
-    plt.grid(True, zorder=0, axis='y')
+    ax.set_title('서울 연도별 사고현황')                 # 그래프 제목
+    plt.xticks(x, yearList)                          # x축을 각각의 연도로
+    plt.legend(loc='upper left')                     # 범례를를
+    pltgrid(True, zorder=0, axis='y')
 
     plt.savefig(f'seoul_total.png')
     plt.clf()
