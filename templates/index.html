@@ -150,10 +150,10 @@ function AutoRun(){
     <!-- 이미지 슬라이드 구성 -->
 
     <div id="visual">     
-            <div class="on"><a href="#"><img src="resources/image/image1.jpeg" alt="1" width="100%" height="100%"></a></div>
-            <div><a href="#"><img src="resources/image/image2.jpeg" alt="2" width="100%" height="100%"></a></div>
-            <div><a href="#"><img src="resources/image/image3.jpeg"" alt="3" width="100%" height="100%"></a></div>
-            <div><a href="#"><img src="resources/image/image4.jpeg"" alt="4" width="100%" height="100%"></a></div>     
+            <div class="on"><a href="#"><img src="{% static 'img/web/image1.jpeg' %}" alt="1" width="100%" height="100%"></a></div>
+            <div><a href="#"><img src="{% static 'img/web/image2.jpeg' %}" alt="2" width="100%" height="100%"></a></div>
+            <div><a href="#"><img src="{% static 'img/web/image3.jpeg' %}" alt="3" width="100%" height="100%"></a></div>
+            <div><a href="#"><img src="{% static 'img/web/image4.jpeg' %}" alt="4" width="100%" height="100%"></a></div>     
         <section id="control">
             <a class="on" href="#"></a>
             <a href="#"></a>
@@ -179,25 +179,25 @@ function AutoRun(){
     <p>
       <button style="margin-left: 5%; margin-right: 7%; background-color:black; border-radius: 30pt;">
         <a href="{% url 'accident' %}">
-          <img src="{% static 'img/web/image3.jpeg' %}" width="220" height="220">
+          <img src="{% static 'img/web/2.jpeg' %}" width="220" height="220">
         </a>
       </button>
       
       <button style="margin-right: 7%; background-color:black; border-radius: 30pt;">
         <a href="{% url 'yellowloc' %}">
-          <img src="{% static 'img/web/image6.jpg' %}" width="220" height="220">
+          <img src="{% static 'img/web/5.jpg' %}" width="220" height="220">
         </a>
       </button>
 
       <button style="margin-right: 7%; background-color:black; border-radius: 30pt;">
         <a href="{% url 'yellowaccident' %}">
-          <img src="{% static 'img/web/yellowcarpet.jpeg' %}" width="220" height="220">
+          <img src="{% static 'img/web/6.jpeg' %}" width="220" height="220">
         </a>
       </button>
       
       <button style="background-color:black; border-radius: 30pt;">
         <a href="{% url 'conclusion' %}">
-          <img src="{% static 'img/web/image4.jpeg' %}" width="220" height="220">
+          <img src="{% static 'img/web/7.jpeg' %}" width="220" height="220">
         </a>
       </button>
       <br><br><br>
