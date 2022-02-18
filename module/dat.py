@@ -169,16 +169,26 @@ def detail_plot_data(name = '',type = 1): #연도별 사상자 수 그래프
     plt.show()
 
 
-def accident_data(name = ''): #교통사고 분석
+def accident_data(): #교통사고 분석
     a = load_data(name= dat1)
     #b = load_data(name= dat2)
     new_a = a[a['발생지_시도']=='서울']
     new_a = new_a[new_a['사고유형_대분류']=='차대사람']
-    pie = new_a['가해자법규위반'].value_counts()
+    new_a = new_a[new_a['피해자_당사자종별'] == '보행자']### 이런 형식으로 항목을 줄입니다
+    pie = new_a['도로형태'].value_counts()### 여기서 분석할 항목 정합니다
     pie.plot.pie()
     plt.xlabel('서울시 보행자 차량 사고 유형')
     plt.ylabel('')
     plt.show()
+
+#개노가다 시작
+def distance(x, y, x1, y1):
+    newx = abs(x - x1)
+    newy = abs(y - y1)
+
+    return pow(newx, 2) + pow(newy, 2)
+def short_cut(x, y):
+    c = load_data_json(name=dat3)
 
 
 
@@ -192,5 +202,5 @@ def accident_data(name = ''): #교통사고 분석
 #연도별 사고건수 출력 type1은 사망사고(B데이터), 0은 모든사고(A데이터)
 #detail_plot_data(name = '',type=0)
 #연도별 사고 현황 출력 type1은 사망사고(B데이터) 0은 모든 사고(A데이터)
-#accident_data(name='')
-corr_data_second(name = '강남구')
+accident_data()
+#corr_data_second(name = '강남구')
