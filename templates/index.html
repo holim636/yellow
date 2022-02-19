@@ -22,6 +22,14 @@
   <script type="text/javascript" src="../static/js/slide.js"></script>
 
   <style>
+    @media (min-width:768px){
+
+    }
+
+    @media (max-width:768px) {
+
+    }
+
     @charset "UTF-8";
     * {
         margin: 0;
@@ -118,12 +126,11 @@
   </nav>
 
   <!-- 2.이미지 슬라이드 구성 (왼)-->
-
-  <div id="visual" style="margin-top:10em; margin-left:10em; margin-right: 5em; display: inline-block; float:left; width:35%">     
-    <div class="on"><a href="#"><img src="{% static 'img/web/image1.jpeg' %}" alt="1" style="width: 100%;height: 100%;"></a></div>
+  <div class="container" style="display:flex">
+      <div id="visual" style="margin-top:10em; margin-left:10em; margin-right: 5em; display: inline-block; float:left; width:35%"><div class="on"><a href="#"><img src="{% static 'img/web/image1.jpeg' %}" alt="1" style="width: 100%;height: 100%;"></a></div>
     <div><a href="#"><img src="{% static 'img/web/image2.jpeg' %}" alt="2" style="width: 100%;height: 100%;"></a></div>
     <div><a href="#"><img src="{% static 'img/web/image3.jpeg' %}" alt="3" style="width: 100%;height: 100%;"></a></div>
-    <div><a href="#"><img src="{% static 'img/web/image4.jpeg' %}" alt="4" style="width: 100%;height: 100%;"></a></div>     
+    <div><a href="#"><img src="{% static 'img/web/image4.jpeg' %}" alt="4" style="width: 100%;height: 100%;"></a></div>
     <section id="control">
       <a class="on" href="#"></a>
       <a href="#"></a>
@@ -133,7 +140,7 @@
   </div>
 
   <!-- 3.옐로우카펫 소개 (오) -->
-  <div style="margin-top:10em; margin-left: 5em; margin-right:10em; display: inline-block; float:left; width:35%">
+      <div style="margin-top:10em; margin-left: 5em; margin-right:10em; display: inline-block; float:left; width:35%">
 
     <!-- 3-1.옐로우카펫이란? -->
     <div style="margin-bottom: 4em;">
@@ -277,6 +284,7 @@
       </div>
     </div> <!--그래프 div-->
   </div> <!--옐로우카펫 오른쪽 div-->
+  </div>
 
 </body>
 </html>
