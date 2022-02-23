@@ -22,13 +22,7 @@
   <script type="text/javascript" src="../static/js/slide.js"></script>
 
   <style>
-    @media (min-width:400px){
 
-    }
-
-    @media (max-width:768px) {
-
-    }
 
     @charset "UTF-8";
     * {
@@ -89,7 +83,7 @@
   <!-- 1.메뉴바 구성 -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: white !important;">
     <div class="container-fluid" style="background-color:black;">
-      <a class="navbar-brand" href="{% url 'index' %}" style="margin-left: 7em;">
+      <a class="navbar-brand" href="{% url 'index' %}" style="margin-left: 3em;">
         <img src="{% static 'img/web/yellowicon.png' %}" style="width: 48px; height: 48px; margin-top: 0.2em; margin-bottom: 0.2em;">
         <img src="{% static 'img/web/yellowfont.png' %}" style="width: 180px; height: 40px; margin-top: 0.2em; ;">
       </a>
@@ -98,12 +92,12 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent" style="margin-right: 17em;">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item" >
             <a class="nav-link active" aria-current="page" href="#" style="color: rgb(253, 222, 17); font-size: 1.5rem; font-weight: bold; margin-right:2em">Graph</a>
           </li>
           <li class="nav-item" >
-            <a class="nav-link" aria-current="page" href="#" style="color: rgb(253, 222, 17); font-size: 1.5rem; font-weight: bold;">Article</a>
+            <a class="nav-link" aria-current="page" href="#" style="color: rgb(253, 222, 17); font-size: 1.5rem; font-weight: bold; margin-right:-8em">Article</a>
           </li>
           <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -149,9 +143,9 @@
       <div style="text-align: center; font-size: 3.5rem; font-weight: bold; margin-bottom: 1.3em; letter-spacing: 1px;">
         아이들을 지키는<br/>옐로우 카펫
       </div>
-      <div style="text-align: center; font-size: 15pt;">
+      <div style="text-align: center; font-size: 15pt; letter-spacing: 1.5px;">
         옐로우 카펫은 보행 전 안전한 곳에서 기다리게 하고,<br>
-        운전자는 이를 쉽게 인지하게 하고자<br>
+        운전자는 이를 쉽게 인지하게 하고자 <br>
         바닥과 벽면을 노랗게 표시하는 교통안전 설치물이에요.
       </div>
     </div>
